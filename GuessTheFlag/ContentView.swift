@@ -10,7 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showingScore = false
-
+    @State private var score = 0
+    @State private var article = ""
+    @State private var wrongAnswer = 0
     @State private var scoreTitle = ""
     @State private var countries = ["Estonia", "France", "Germany",
     "Ireland", "Italy", "Nigeria", "Poland", "Russia",
@@ -38,10 +40,11 @@ struct ContentView: View {
                     }
                     
                 }
+                Text("Current Score: \(score).").foregroundColor(.white).font(.subheadline).fontWeight(.semibold)
                 Spacer()
             }
         }.alert(isPresented: $showingScore) {
-            Alert(title: Text(scoreTitle), message: Text("Your Score is ???"), dismissButton: .default(Text("Continue")) {
+            Alert(title: Text(scoreTitle), message: Text("That is the  flag of \(self.countries[wrongAnswer])"), dismissButton: .default(Text("Continue")) {
                 self.askQuestion()
                 })
         }
@@ -49,8 +52,11 @@ struct ContentView: View {
     func flaggedtapped(_ number: Int) {
         if number == correctAnswer {
             scoreTitle = "Correct"
+            score += 1
         } else {
-            scoreTitle = "Wrong"
+            wrongAnswer = number
+            scoreTitle = "Wrong!"
+            score += -1
         }
         
         showingScore = true
